@@ -1,0 +1,28 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-800">{{ isLogin ? 'Entrar' : 'Cadastre-se' }}</h2>
+      <button class="text-gray-500 hover:text-gray-700" (click)="onClose()">
+        &times;
+      </button>
+    </div>
+    <form>
+      <div *ngIf="!isLogin" class="mb-4">
+        <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
+        <input [formControl]="nome" name="nome" type="text" id="nome" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-rose-600 focus:border-rose-600" />
+      </div>
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input [formControl]="email" name="email" type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-rose-600 focus:border-rose-600" />
+      </div>
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
+        <input [formControl]="password" name="password" type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-rose-600 focus:border-rose-600" />
+      </div>
+      <div *ngIf="errorMessage" class="text-red-500 text-sm mb-4">{{ errorMessage }}</div>
+      <button (click)="onSubmit()" class="w-full bg-rose-600 text-white py-2 px-4 rounded hover:bg-gray-600">
+        {{ isLogin ? 'Entrar' : 'Cadastrar' }}
+      </button>
+    </form>
+  </div>
+</div>

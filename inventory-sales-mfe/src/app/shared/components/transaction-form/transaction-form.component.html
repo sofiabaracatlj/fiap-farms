@@ -1,0 +1,68 @@
+<div class="w-full z-20">
+    <form class="w-full sm:w-80 mx-auto mt-8 bg-gray-200 p-6 rounded-lg">
+        <div class="mb-6">
+            <label for="type" class="block text-gray-800 font-bold mb-2">Tipo de Transação</label>
+            <select
+                id="type"
+                [formControl]="type"
+                class="w-full p-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <option *ngFor="let type of transactionTypes" [value]="type.value">
+                    {{ type.label }}
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-6">
+            <label for="value" class="block text-gray-800 font-bold mb-2">Valor</label>
+            <input
+                id="value"
+                [formControl]="value"
+                placeholder="R$ 0,00"
+                class="w-full p-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+
+        <div class="mb-6">
+            <label for="from" class="block text-gray-800 font-bold mb-2">De</label>
+            <input
+                id="from"
+                [formControl]="from"
+                placeholder="Origem"
+                class="w-full p-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+
+        <div class="mb-6">
+            <label for="to" class="block text-gray-800 font-bold mb-2">Para</label>
+            <input
+                id="to"
+                [formControl]="to"
+                placeholder="Destino"
+                class="w-full p-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+
+        <div class="mb-6">
+            <label for="anexo" class="block text-gray-800 font-bold mb-2">Anexo</label>
+            <input type="file" class="file-upload" (change)="convertFile($event)" />
+        </div>
+
+        <div class="flex justify-between items-center">
+            <button
+                (click)="submitForm()"
+                [disabled]="transactionForm.invalid"
+                class="p-2 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-600"
+            >
+                Concluir
+            </button>
+            <button
+                type="button"
+                (click)="cancel()"
+                class="p-2 rounded-lg bg-gray-500 text-white font-bold hover:bg-gray-600"
+            >
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

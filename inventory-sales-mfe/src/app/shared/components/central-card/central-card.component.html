@@ -1,0 +1,7 @@
+
+<ng-container *ngIf="this.page == '/home'">
+    <app-new-transaction *ngIf="accountId != ''" class="w-full flex justify-center" [accountId]="accountId" (onTransactionSuccessEmitter)="onNewTransaction()"></app-new-transaction>
+</ng-container>
+<app-other-services *ngIf="page == '/home/services'" class="w-full flex justify-center"></app-other-services>
+<app-cards *ngIf="page == '/home/cards'" class="w-full flex justify-center"></app-cards>
+<app-investments *ngIf="page == '/home/investments'" class="w-full flex justify-center"></app-investments>

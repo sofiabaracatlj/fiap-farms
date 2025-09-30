@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>package.json</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "";
+    var thisFile = "package.json";
+    var defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container">
+    <div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+    
+      <tr>
+        <td class="docs">
+          <h1>package.json</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+    
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1"></a>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="json">{
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"transaction"</span>,
+  <span class="hljs-attr">"version"</span>: <span class="hljs-string">"0.0.0"</span>,
+  <span class="hljs-attr">"scripts"</span>: {
+    <span class="hljs-attr">"ng"</span>: <span class="hljs-string">"ng"</span>,
+    <span class="hljs-attr">"start"</span>: <span class="hljs-string">"ng serve"</span>,
+    <span class="hljs-attr">"build"</span>: <span class="hljs-string">"ng build"</span>,
+    <span class="hljs-attr">"watch"</span>: <span class="hljs-string">"ng build --watch --configuration development"</span>,
+    <span class="hljs-attr">"test"</span>: <span class="hljs-string">"ng test"</span>,
+    <span class="hljs-attr">"run:all"</span>: <span class="hljs-string">"node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js"</span>,
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"module"</span>
+  },
+  <span class="hljs-attr">"private"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"dependencies"</span>: {
+    <span class="hljs-attr">"@angular-architects/module-federation"</span>: <span class="hljs-string">"^19.0.3"</span>,
+    <span class="hljs-attr">"@angular/animations"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/cdk"</span>: <span class="hljs-string">"^15.2.9"</span>,
+    <span class="hljs-attr">"@angular/common"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/compiler"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/core"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/forms"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/material"</span>: <span class="hljs-string">"^15.2.9"</span>,
+    <span class="hljs-attr">"@angular/platform-browser"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/platform-browser-dynamic"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@angular/router"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@fortawesome/angular-fontawesome"</span>: <span class="hljs-string">"^0.12.1"</span>,
+    <span class="hljs-attr">"@fortawesome/fontawesome-svg-core"</span>: <span class="hljs-string">"^6.7.2"</span>,
+    <span class="hljs-attr">"@fortawesome/free-brands-svg-icons"</span>: <span class="hljs-string">"^6.7.2"</span>,
+    <span class="hljs-attr">"@fortawesome/free-solid-svg-icons"</span>: <span class="hljs-string">"^6.7.2"</span>,
+    <span class="hljs-attr">"@ngrx/store"</span>: <span class="hljs-string">"^15.4.0"</span>,
+    <span class="hljs-attr">"@tailwindcss/postcss"</span>: <span class="hljs-string">"^4.0.15"</span>,
+    <span class="hljs-attr">"angular-file-upload"</span>: <span class="hljs-string">"^2.6.1"</span>,
+    <span class="hljs-attr">"rxjs"</span>: <span class="hljs-string">"~7.8.0"</span>,
+    <span class="hljs-attr">"tslib"</span>: <span class="hljs-string">"^2.3.0"</span>,
+    <span class="hljs-attr">"zone.js"</span>: <span class="hljs-string">"~0.12.0"</span>
+  },
+  <span class="hljs-attr">"devDependencies"</span>: {
+    <span class="hljs-attr">"@angular-devkit/build-angular"</span>: <span class="hljs-string">"^15.2.11"</span>,
+    <span class="hljs-attr">"@angular/cli"</span>: <span class="hljs-string">"~15.2.11"</span>,
+    <span class="hljs-attr">"@angular/compiler-cli"</span>: <span class="hljs-string">"^15.2.0"</span>,
+    <span class="hljs-attr">"@types/jasmine"</span>: <span class="hljs-string">"~4.3.0"</span>,
+    <span class="hljs-attr">"autoprefixer"</span>: <span class="hljs-string">"^10.4.21"</span>,
+    <span class="hljs-attr">"jasmine-core"</span>: <span class="hljs-string">"~4.5.0"</span>,
+    <span class="hljs-attr">"karma"</span>: <span class="hljs-string">"~6.4.0"</span>,
+    <span class="hljs-attr">"karma-chrome-launcher"</span>: <span class="hljs-string">"~3.1.0"</span>,
+    <span class="hljs-attr">"karma-coverage"</span>: <span class="hljs-string">"~2.2.0"</span>,
+    <span class="hljs-attr">"karma-jasmine"</span>: <span class="hljs-string">"~5.1.0"</span>,
+    <span class="hljs-attr">"karma-jasmine-html-reporter"</span>: <span class="hljs-string">"~2.0.0"</span>,
+    <span class="hljs-attr">"ngx-build-plus"</span>: <span class="hljs-string">"^15.0.0"</span>,
+    <span class="hljs-attr">"postcss"</span>: <span class="hljs-string">"^8.5.3"</span>,
+    <span class="hljs-attr">"tailwindcss"</span>: <span class="hljs-string">"^3.4.17"</span>,
+    <span class="hljs-attr">"typescript"</span>: <span class="hljs-string">"~4.9.4"</span>
+  }
+}
+
+</pre>
+        </td>
+      </tr>
+    
+  </tbody>
+</table>
+
+  </div>
+</body>
+</html>

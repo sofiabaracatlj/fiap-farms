@@ -1,0 +1,157 @@
+/* Estilos customizados para Add Sale Page */
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estilos para campos de formulário */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #10b981;
+    border-color: #10b981;
+}
+
+/* Estilos para campos com erro */
+input.border-red-500:focus,
+select.border-red-500:focus,
+textarea.border-red-500:focus {
+    box-shadow: 0 0 0 2px #ef4444;
+    border-color: #ef4444;
+}
+
+/* Estilos para select com ícone */
+select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5rem 1.5rem;
+    padding-right: 2.5rem;
+}
+
+/* Cards de informação */
+.product-info-card {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.sale-summary-card {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+
+/* Animação para cards */
+.product-info-card,
+.sale-summary-card {
+    transition: all 0.3s ease-in-out;
+}
+
+.product-info-card:hover,
+.sale-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .flex-row {
+        flex-direction: column;
+    }
+    
+    .space-x-3 > * + * {
+        margin-left: 0;
+        margin-top: 0.75rem;
+    }
+}
+
+/* Hover effects */
+.hover\\:bg-gray-50:hover {
+    background-color: #f9fafb;
+}
+
+.hover\\:bg-green-700:hover {
+    background-color: #047857;
+}
+
+/* Disabled state */
+.disabled\\:opacity-50:disabled {
+    opacity: 0.5;
+}
+
+.disabled\\:cursor-not-allowed:disabled {
+    cursor: not-allowed;
+}
+
+/* Estilo para valores monetários */
+.money-value {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+/* Estilo para status indicators */
+.status-pending {
+    color: #f59e0b;
+}
+
+.status-completed {
+    color: #10b981;
+}
+
+.status-cancelled {
+    color: #ef4444;
+}
+
+/* Animação sutil para números */
+.animate-number {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo para campos obrigatórios */
+.required-field::after {
+    content: " *";
+    color: #ef4444;
+}
+
+/* Focus trap para acessibilidade */
+.form-section:focus-within {
+    outline: 2px solid #10b981;
+    outline-offset: 2px;
+}
+
+/* Estilo para tooltips */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #374151;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+}

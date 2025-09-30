@@ -1,0 +1,46 @@
+<!-- Example usage of the progress bars in any component -->
+
+<!-- Using the detailed progress bar -->
+<app-progress-bar
+  title="Vendas do Mês"
+  [progress]="75"
+  [currentValue]="45000"
+  [targetValue]="60000"
+  unit="R$"
+  color="green"
+  [showPercentage]="true"
+  [showValues]="true">
+</app-progress-bar>
+
+<!-- Using the simple progress bar -->
+<div class="space-y-4">
+  <div>
+    <h4 class="text-sm font-medium text-gray-700 mb-2">Produção de Tomates</h4>
+    <app-simple-progress-bar
+      [progress]="85"
+      color="blue"
+      label="850/1000 kg"
+      [showLabels]="true">
+    </app-simple-progress-bar>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium text-gray-700 mb-2">Meta de Lucro</h4>
+    <app-simple-progress-bar
+      [progress]="93"
+      color="green"
+      label="28/30%"
+      [showLabels]="true">
+    </app-simple-progress-bar>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium text-gray-700 mb-2">Novos Clientes</h4>
+    <app-simple-progress-bar
+      [progress]="60"
+      color="yellow"
+      label="12/20 clientes"
+      [showLabels]="true">
+    </app-simple-progress-bar>
+  </div>
+</div>

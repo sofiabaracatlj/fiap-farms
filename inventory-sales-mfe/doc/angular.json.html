@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>angular.json</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "";
+    var thisFile = "angular.json";
+    var defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container">
+    <div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+    
+      <tr>
+        <td class="docs">
+          <h1>angular.json</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+    
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1"></a>
+</div>
+
+        </td>
+        <td class="code highlight">
+          <pre class="json">{
+	<span class="hljs-attr">"$schema"</span>: <span class="hljs-string">"./node_modules/@angular/cli/lib/config/schema.json"</span>,
+	<span class="hljs-attr">"version"</span>: <span class="hljs-number">1</span>,
+	<span class="hljs-attr">"newProjectRoot"</span>: <span class="hljs-string">"projects"</span>,
+	<span class="hljs-attr">"projects"</span>: {
+		<span class="hljs-attr">"transaction"</span>: {
+			<span class="hljs-attr">"projectType"</span>: <span class="hljs-string">"application"</span>,
+			<span class="hljs-attr">"schematics"</span>: {
+				<span class="hljs-attr">"@schematics/angular:component"</span>: {
+					<span class="hljs-attr">"style"</span>: <span class="hljs-string">"css"</span>
+				}
+			},
+			<span class="hljs-attr">"root"</span>: <span class="hljs-string">""</span>,
+			<span class="hljs-attr">"sourceRoot"</span>: <span class="hljs-string">"src"</span>,
+			<span class="hljs-attr">"prefix"</span>: <span class="hljs-string">"app"</span>,
+			<span class="hljs-attr">"architect"</span>: {
+				<span class="hljs-attr">"build"</span>: {
+					<span class="hljs-attr">"builder"</span>: <span class="hljs-string">"ngx-build-plus:browser"</span>,
+					<span class="hljs-attr">"options"</span>: {
+						<span class="hljs-attr">"outputPath"</span>: <span class="hljs-string">"dist/transaction"</span>,
+						<span class="hljs-attr">"index"</span>: <span class="hljs-string">"src/index.html"</span>,
+						<span class="hljs-attr">"main"</span>: <span class="hljs-string">"src/main.ts"</span>,
+						<span class="hljs-attr">"polyfills"</span>: [
+							<span class="hljs-string">"zone.js"</span>
+						],
+						<span class="hljs-attr">"tsConfig"</span>: <span class="hljs-string">"tsconfig.app.json"</span>,
+						<span class="hljs-attr">"inlineStyleLanguage"</span>: <span class="hljs-string">"css"</span>,
+						<span class="hljs-attr">"assets"</span>: [
+							<span class="hljs-string">"src/favicon.ico"</span>,
+							<span class="hljs-string">"src/assets"</span>
+						],
+						<span class="hljs-attr">"styles"</span>: [
+							<span class="hljs-string">"src/styles.css"</span>
+						],
+						<span class="hljs-attr">"scripts"</span>: [],
+						<span class="hljs-attr">"extraWebpackConfig"</span>: <span class="hljs-string">"webpack.config.js"</span>,
+						<span class="hljs-attr">"commonChunk"</span>: <span class="hljs-literal">false</span>
+					},
+					<span class="hljs-attr">"configurations"</span>: {
+						<span class="hljs-attr">"production"</span>: {
+							<span class="hljs-attr">"budgets"</span>: [
+								{
+									<span class="hljs-attr">"type"</span>: <span class="hljs-string">"initial"</span>,
+									<span class="hljs-attr">"maximumWarning"</span>: <span class="hljs-string">"500kb"</span>,
+									<span class="hljs-attr">"maximumError"</span>: <span class="hljs-string">"1mb"</span>
+								},
+								{
+									<span class="hljs-attr">"type"</span>: <span class="hljs-string">"anyComponentStyle"</span>,
+									<span class="hljs-attr">"maximumWarning"</span>: <span class="hljs-string">"2kb"</span>,
+									<span class="hljs-attr">"maximumError"</span>: <span class="hljs-string">"4kb"</span>
+								}
+							],
+							<span class="hljs-attr">"outputHashing"</span>: <span class="hljs-string">"all"</span>,
+							<span class="hljs-attr">"extraWebpackConfig"</span>: <span class="hljs-string">"webpack.prod.config.js"</span>
+						},
+						<span class="hljs-attr">"development"</span>: {
+							<span class="hljs-attr">"buildOptimizer"</span>: <span class="hljs-literal">false</span>,
+							<span class="hljs-attr">"optimization"</span>: <span class="hljs-literal">false</span>,
+							<span class="hljs-attr">"vendorChunk"</span>: <span class="hljs-literal">true</span>,
+							<span class="hljs-attr">"extractLicenses"</span>: <span class="hljs-literal">false</span>,
+							<span class="hljs-attr">"sourceMap"</span>: <span class="hljs-literal">true</span>,
+							<span class="hljs-attr">"namedChunks"</span>: <span class="hljs-literal">true</span>
+						}
+					},
+					<span class="hljs-attr">"defaultConfiguration"</span>: <span class="hljs-string">"production"</span>
+				},
+				<span class="hljs-attr">"serve"</span>: {
+					<span class="hljs-attr">"builder"</span>: <span class="hljs-string">"ngx-build-plus:dev-server"</span>,
+					<span class="hljs-attr">"configurations"</span>: {
+						<span class="hljs-attr">"production"</span>: {
+							<span class="hljs-attr">"browserTarget"</span>: <span class="hljs-string">"transaction:build:production"</span>,
+							<span class="hljs-attr">"extraWebpackConfig"</span>: <span class="hljs-string">"webpack.prod.config.js"</span>
+						},
+						<span class="hljs-attr">"development"</span>: {
+							<span class="hljs-attr">"browserTarget"</span>: <span class="hljs-string">"transaction:build:development"</span>
+						}
+					},
+					<span class="hljs-attr">"defaultConfiguration"</span>: <span class="hljs-string">"development"</span>,
+					<span class="hljs-attr">"options"</span>: {
+						<span class="hljs-attr">"port"</span>: <span class="hljs-number">4201</span>,
+						<span class="hljs-attr">"publicHost"</span>: <span class="hljs-string">"http://localhost:4201"</span>,
+						<span class="hljs-attr">"extraWebpackConfig"</span>: <span class="hljs-string">"webpack.config.js"</span>
+					}
+				},
+				<span class="hljs-attr">"extract-i18n"</span>: {
+					<span class="hljs-attr">"builder"</span>: <span class="hljs-string">"ngx-build-plus:extract-i18n"</span>,
+					<span class="hljs-attr">"options"</span>: {
+						<span class="hljs-attr">"browserTarget"</span>: <span class="hljs-string">"transaction:build"</span>,
+						<span class="hljs-attr">"extraWebpackConfig"</span>: <span class="hljs-string">"webpack.config.js"</span>
+					}
+				},
+				<span class="hljs-attr">"test"</span>: {
+					<span class="hljs-attr">"builder"</span>: <span class="hljs-string">"@angular-devkit/build-angular:karma"</span>,
+					<span class="hljs-attr">"options"</span>: {
+						<span class="hljs-attr">"polyfills"</span>: [
+							<span class="hljs-string">"zone.js"</span>,
+							<span class="hljs-string">"zone.js/testing"</span>
+						],
+						<span class="hljs-attr">"tsConfig"</span>: <span class="hljs-string">"tsconfig.spec.json"</span>,
+						<span class="hljs-attr">"inlineStyleLanguage"</span>: <span class="hljs-string">"css"</span>,
+						<span class="hljs-attr">"assets"</span>: [
+							<span class="hljs-string">"src/favicon.ico"</span>,
+							<span class="hljs-string">"src/assets"</span>
+						],
+						<span class="hljs-attr">"styles"</span>: [
+							<span class="hljs-string">"src/styles.css"</span>
+						],
+						<span class="hljs-attr">"scripts"</span>: []
+					}
+				}
+			}
+		}
+	},
+	<span class="hljs-attr">"cli"</span>: {
+		<span class="hljs-attr">"analytics"</span>: <span class="hljs-string">"ce357160-7d01-4612-83be-2b761884a761"</span>
+	}
+}
+</pre>
+        </td>
+      </tr>
+    
+  </tbody>
+</table>
+
+  </div>
+</body>
+</html>

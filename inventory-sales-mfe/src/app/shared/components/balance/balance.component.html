@@ -1,0 +1,34 @@
+<div class="relative bg-cyan-900 min-h-[25rem] rounded-lg w-full sm:max-w-[38rem]">
+  <div class="absolute right-0 bg-checkered-pattern bg-right-top bg-no-repeat bg-contain h-1/2 w-1/2"></div>
+  <div class="absolute left-0 bottom-0 bg-checkered-pattern-bottom bg-left-bottom bg-no-repeat bg-contain h-1/2 w-1/2"></div>
+
+  <div class="flex h-full w-full flex-col sm:flex-row">
+    <div class="flex sm:w-full flex-col items-center sm:items-start">
+      <span class="text-neutral-50 text-2xl p-6">Olá, Sofia</span>
+      <span class="text-neutral-50 text-sm px-6">{{ currentDate }}</span>
+      <img
+        class="hidden sm:block mt-12 z-40"
+        src="http://localhost:4201/assets/ilustracao.png"
+        alt="Illustration"
+        width="283"
+        height="228.17"
+      />
+    </div>
+    <div class="flex sm:w-full flex-col py-10 sm:py-24 items-center sm:items-start">
+      <div class="flex flex-row pb-4">
+        <span class="text-neutral-50 text-2xl">Saldo</span>
+        <fa-icon [icon]="faEye" class="text-neutral-50 lg:text-red-600 block ml-6"></fa-icon>
+      </div>
+      <hr class="w-44 py-4" />
+      <span class="text-neutral-50 text-sm">Conta Corrente</span>
+      <span class="text-neutral-50 text-2xl pt-2">R$ {{balance$ | async}}</span>
+      <img
+        class="block sm:hidden mt-36 z-40"
+        src="http://localhost:4201/assets/ilustracao.png"
+        alt="Illustration"
+        width="283"
+        height="228.17"
+      />
+    </div>
+  </div>
+</div>

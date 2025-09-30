@@ -1,0 +1,25 @@
+<app-header></app-header>
+<div class="bg-green-100">
+  <div>
+    <app-menu-bar></app-menu-bar>
+  </div>
+  <div
+    class="min-h-screen flex flex-row gap-8 justify-center xl:flex-row p-6 xl:items-start"
+  >
+    <app-side-bar-menu class="xl:min-h-screen"></app-side-bar-menu>
+    <div class="flex flex-col gap-8 xl:flex-row w-full items-center ">
+      <div class="w-full bg-gray-200 w-full flex-wrap flex flex-col justify-center content-start rounded-lg sm:max-w-[38rem] sm:p-8 py-8 px-4">
+        <h1 class="text-2xl font-bold mb-4">My Accounts</h1>
+        <div class="user-details">
+          <p><strong>Email:</strong> {{ user?.email }}</p>
+          <p><strong>ID:</strong> {{ user?.id }}</p>
+          <p><strong>Password:</strong> {{ user?.password }}</p>
+          <p><strong>Username:</strong> {{ user?.username }}</p>
+        </div>
+        <ng-template #noAccounts>
+          <p>No accounts found.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

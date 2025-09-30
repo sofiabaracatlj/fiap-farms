@@ -1,0 +1,261 @@
+<div class="min-h-screen bg-gray-50 py-6">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Registrar Venda</h1>
+                    <p class="text-gray-600 mt-1">Adicione uma nova venda e atualize o estoque automaticamente</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button
+                        type="button"
+                        (click)="onCancel()"
+                        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <form [formGroup]="saleForm" (ngSubmit)="onSubmit()">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Produto -->
+                    <div class="md:col-span-2">
+                        <label for="productId" class="block text-sm font-medium text-gray-700 mb-2">
+                            Produto <span class="text-red-500">*</span>
+                        </label>
+                        <select
+                            id="productId"
+                            formControlName="productId"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('productId')">
+                            <option value="">Selecione um produto</option>
+                            <option *ngFor="let product of products$ | async" [value]="product.id">
+                                {{ product.name }} - R$ {{ product.unitPrice | number:'1.2-2' }} ({{ product.category }})
+                            </option>
+                        </select>
+                        <p *ngIf="isFieldInvalid('productId')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('productId') }}
+                        </p>
+                    </div>
+
+                    <!-- Informações do Produto Selecionado -->
+                    <div class="md:col-span-2" *ngIf="selectedProduct">
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+                            <h3 class="text-sm font-medium text-blue-800 mb-2">Informações do Produto</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <span class="text-blue-600 font-medium">Preço de Venda:</span>
+                                    <p class="text-blue-900">R$ {{ selectedProduct.unitPrice | number:'1.2-2' }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-blue-600 font-medium">Preço de Custo:</span>
+                                    <p class="text-blue-900">R$ {{ selectedProduct.costPrice | number:'1.2-2' }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-blue-600 font-medium">Margem Atual:</span>
+                                    <p class="text-blue-900">{{ selectedProduct.profitMargin | number:'1.2-2' }}%</p>
+                                </div>
+                                <div>
+                                    <span class="text-blue-600 font-medium">Categoria:</span>
+                                    <p class="text-blue-900">{{ selectedProduct.category }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantidade -->
+                    <div>
+                        <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">
+                            Quantidade <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            formControlName="quantity"
+                            placeholder="Ex: 10"
+                            min="1"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('quantity')">
+                        <p *ngIf="isFieldInvalid('quantity')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('quantity') }}
+                        </p>
+                    </div>
+
+                    <!-- Preço Unitário -->
+                    <div>
+                        <label for="unitPrice" class="block text-sm font-medium text-gray-700 mb-2">
+                            Preço Unitário (R$)
+                        </label>
+                        <input
+                            type="number"
+                            id="unitPrice"
+                            formControlName="unitPrice"
+                            placeholder="Ex: 12.50"
+                            min="0.01"
+                            step="0.01"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('unitPrice')">
+                        <p class="mt-1 text-xs text-gray-500">Deixe vazio para usar o preço padrão do produto</p>
+                        <p *ngIf="isFieldInvalid('unitPrice')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('unitPrice') }}
+                        </p>
+                    </div>
+
+                    <!-- Cálculos em Tempo Real -->
+                    <div class="md:col-span-2" *ngIf="totalAmount > 0">
+                        <div class="bg-green-50 border border-green-200 rounded-md p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-3">Resumo da Venda</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span class="text-green-600 font-medium">Valor Total:</span>
+                                    <p class="text-green-900 text-lg font-bold">R$ {{ totalAmount | number:'1.2-2' }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-green-600 font-medium">Lucro Estimado:</span>
+                                    <p class="text-green-900 text-lg font-bold">R$ {{ estimatedProfit | number:'1.2-2' }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-green-600 font-medium">Margem desta Venda:</span>
+                                    <p class="text-green-900 text-lg font-bold">{{ profitMargin | number:'1.2-2' }}%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nome do Cliente -->
+                    <div>
+                        <label for="customerName" class="block text-sm font-medium text-gray-700 mb-2">
+                            Nome do Cliente
+                        </label>
+                        <input
+                            type="text"
+                            id="customerName"
+                            formControlName="customerName"
+                            placeholder="Ex: João Silva"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+
+                    <!-- Email do Cliente -->
+                    <div>
+                        <label for="customerEmail" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email do Cliente
+                        </label>
+                        <input
+                            type="email"
+                            id="customerEmail"
+                            formControlName="customerEmail"
+                            placeholder="Ex: joao@email.com"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('customerEmail')">
+                        <p *ngIf="isFieldInvalid('customerEmail')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('customerEmail') }}
+                        </p>
+                    </div>
+
+                    <!-- Data da Venda -->
+                    <div>
+                        <label for="saleDate" class="block text-sm font-medium text-gray-700 mb-2">
+                            Data da Venda <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="date"
+                            id="saleDate"
+                            formControlName="saleDate"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('saleDate')">
+                        <p *ngIf="isFieldInvalid('saleDate')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('saleDate') }}
+                        </p>
+                    </div>
+
+                    <!-- Forma de Pagamento -->
+                    <div>
+                        <label for="paymentMethod" class="block text-sm font-medium text-gray-700 mb-2">
+                            Forma de Pagamento <span class="text-red-500">*</span>
+                        </label>
+                        <select
+                            id="paymentMethod"
+                            formControlName="paymentMethod"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('paymentMethod')">
+                            <option value="">Selecione uma forma de pagamento</option>
+                            <option *ngFor="let method of paymentMethods" [value]="method.value">
+                                {{ method.label }}
+                            </option>
+                        </select>
+                        <p *ngIf="isFieldInvalid('paymentMethod')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('paymentMethod') }}
+                        </p>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status da Venda <span class="text-red-500">*</span>
+                        </label>
+                        <select
+                            id="status"
+                            formControlName="status"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            [class.border-red-500]="isFieldInvalid('status')">
+                            <option *ngFor="let statusOption of saleStatuses" [value]="statusOption.value">
+                                {{ statusOption.label }}
+                            </option>
+                        </select>
+                        <p *ngIf="isFieldInvalid('status')" class="mt-1 text-sm text-red-600">
+                            {{ getFieldError('status') }}
+                        </p>
+                    </div>
+
+                    <!-- Observações -->
+                    <div class="md:col-span-2">
+                        <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
+                            Observações
+                        </label>
+                        <textarea
+                            id="notes"
+                            formControlName="notes"
+                            rows="3"
+                            placeholder="Informações adicionais sobre a venda..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-8 pt-6 border-t border-gray-200">
+                    <button
+                        type="button"
+                        (click)="onReset()"
+                        class="w-full sm:w-auto px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <i class="fas fa-undo mr-2"></i>
+                        Limpar
+                    </button>
+
+                    <button
+                        type="button"
+                        (click)="onCancel()"
+                        class="w-full sm:w-auto px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        [disabled]="!saleForm.valid || isLoading"
+                        class="w-full sm:w-auto px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i *ngIf="!isLoading" class="fas fa-cash-register mr-2"></i>
+                        <i *ngIf="isLoading" class="fas fa-spinner fa-spin mr-2"></i>
+                        {{ isLoading ? 'Registrando...' : 'Registrar Venda' }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

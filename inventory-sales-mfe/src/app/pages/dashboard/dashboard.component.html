@@ -1,0 +1,224 @@
+<div class="dashboard-container p-6 bg-gray-50 min-h-screen">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard - FIAP Farms</h1>
+      <p class="text-gray-600">Visão geral das operações da fazenda</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div *ngIf="!isLoading && (dashboardData$ | async) as data" class="space-y-8">
+      
+      <!-- Cards de Estatísticas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+        
+        <!-- Total de Produtos -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Produtos</p>
+              <p class="text-3xl font-bold text-gray-900">{{data.totalProducts}}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <i class="fas fa-box text-blue-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Valor do Estoque -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Valor Estoque</p>
+              <p class="text-3xl font-bold text-gray-900">{{formatCurrency(data.totalInventoryValue)}}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <i class="fas fa-warehouse text-green-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estoque Baixo -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Estoque Baixo</p>
+              <p class="text-3xl font-bold text-gray-900">{{data.lowStockItems}}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <i class="fas fa-exclamation-triangle text-yellow-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total de Vendas -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Vendas</p>
+              <p class="text-3xl font-bold text-gray-900">{{data.totalSales}}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <i class="fas fa-shopping-cart text-purple-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Receita Total -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Receita Total</p>
+              <p class="text-3xl font-bold text-gray-900">{{formatCurrency(data.totalRevenue)}}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <i class="fas fa-dollar-sign text-indigo-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lucro Total -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+          <div class="flex items-center">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Lucro Total</p>
+              <p class="text-3xl font-bold text-gray-900">{{formatCurrency(data.totalProfit)}}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <i class="fas fa-chart-line text-red-500 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Conteúdo Principal -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Top Produtos Mais Vendidos -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+            Top Produtos Mais Vendidos
+          </h3>
+          
+          <div *ngIf="data.topProducts.length === 0" class="text-center py-8 text-gray-500">
+            <i class="fas fa-info-circle text-3xl mb-2"></i>
+            <p>Nenhuma venda registrada ainda</p>
+          </div>
+
+          <div *ngIf="data.topProducts.length > 0" class="space-y-4">
+            <div *ngFor="let item of data.topProducts; let i = index" 
+                 class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div class="flex items-center space-x-3">
+                <span class="flex items-center justify-center w-8 h-8 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                  {{i + 1}}
+                </span>
+                <div>
+                  <p class="font-medium text-gray-900">{{item.product.name}}</p>
+                  <p class="text-sm text-gray-600">{{item.quantity}} unidades vendidas</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-gray-900">{{formatCurrency(item.revenue)}}</p>
+                <p class="text-sm text-gray-600">receita</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produtos com Estoque Baixo -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>
+            Produtos com Estoque Baixo
+          </h3>
+          
+          <div *ngIf="data.lowStockProducts.length === 0" class="text-center py-8 text-gray-500">
+            <i class="fas fa-check-circle text-3xl mb-2 text-green-500"></i>
+            <p>Todos os produtos estão com estoque adequado!</p>
+          </div>
+
+          <div *ngIf="data.lowStockProducts.length > 0" class="space-y-4">
+            <div *ngFor="let item of data.lowStockProducts" 
+                 class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div>
+                <p class="font-medium text-gray-900">{{item.product.name}}</p>
+                <p class="text-sm text-gray-600">Categoria: {{item.product.category}}</p>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-yellow-800">{{item.inventory.currentStock}} / {{item.inventory.minimumStock}}</p>
+                <p class="text-sm text-yellow-600">atual / mínimo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Vendas Recentes -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <i class="fas fa-clock text-blue-500 mr-2"></i>
+          Vendas Recentes
+        </h3>
+        
+        <div *ngIf="data.recentSales.length === 0" class="text-center py-8 text-gray-500">
+          <i class="fas fa-info-circle text-3xl mb-2"></i>
+          <p>Nenhuma venda registrada ainda</p>
+        </div>
+
+        <div *ngIf="data.recentSales.length > 0" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lucro</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let sale of data.recentSales" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{formatDate(sale.saleDate)}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{sale.customerName || 'Cliente não informado'}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{sale.quantity}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {{formatCurrency(sale.totalAmount)}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
+                  {{formatCurrency(sale.profit)}}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                        [ngClass]="{
+                          'bg-green-100 text-green-800': sale.status === 'completed',
+                          'bg-yellow-100 text-yellow-800': sale.status === 'pending',
+                          'bg-red-100 text-red-800': sale.status === 'cancelled'
+                        }">
+                    {{sale.status === 'completed' ? 'Concluída' : 
+                      sale.status === 'pending' ? 'Pendente' : 'Cancelada'}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

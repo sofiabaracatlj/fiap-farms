@@ -1,0 +1,36 @@
+<div class="flex flex-col gap-4 bg-gray-100 p-8">
+    <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">Cartões</h2>
+    <div 
+        class="flex justify-between items-center p-4 flex-col sm:flex-row sm:gap-4 sm:items-start" 
+        *ngFor="let card of cards"
+    >
+        <div class="bg-cyan-900 w-[328px] h-[164px] p-4 rounded-lg flex flex-col justify-between">
+            <div>
+
+                <h3 class="text-sm text-white font-semibold">Byte</h3>
+                <p class="text-gray-400">Platinum</p>
+            </div>
+            <div>
+
+                <h3 class="text-sm text-white font-semibold">{{ card.name }}</h3>
+                <p class="text-gray-400">{{ card.number }}</p>
+            </div>
+
+           
+        </div>
+        <div class="flex flex-col justify-around h-full space-x-2">
+            <button 
+                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-900" 
+                (click)="configureCard(card)"
+            >
+                Configurar
+            </button>
+            <button 
+                class="px-4 py-2 bg-white text-red-500 border border-red-500 rounded hover:bg-red-600" 
+                (click)="blockCard(card)"
+            >
+                Bloquear
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<div [ngClass]="typeClasses[type]">
+    <div *ngFor="let item of menuItems; let index = index" class="flex flex-col content-center text-center">
+        <div
+        class="py-4 cursor-pointer"
+        [ngClass]="{'color: text-rose-600': actualPage === item.href}">
+
+            <a
+            (click)="navigateTo(item.href)"
+            [ngClass]="{
+                'text-sm py-2 text-center text-primary': type === 'menuBar',
+                'text-sm py-4 text-center text-primary': type !== 'menuBar',
+                'font-bold': actualPage === item.href,
+                'font-normal': actualPage !== item.href
+            }"
+        >
+        {{ item.label }}
+    </a>
+</div>
+        <ng-container *ngIf="type !== 'menuBar'">
+            <hr *ngIf="index < menuItems.length - 1" class="w-30" />
+        </ng-container>
+        <ng-container *ngIf="type === 'menuBar' && actualPage === item.href">
+            <hr class="w-36 bg-green-500 h-[3px]" />
+        </ng-container>
+    </div>
+</div>

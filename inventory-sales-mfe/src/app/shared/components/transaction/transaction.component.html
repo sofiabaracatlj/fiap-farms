@@ -1,0 +1,25 @@
+<div class="bg-white p-4 w-full h-full rounded-lg shadow-md">
+  <div class="w-52 m-auto">
+    <h1 class="text-2xl font-bold mb-4 text-cyan-900">Extrato</h1>
+    <div *ngFor="let month of groupedTransactions | keyvalue" class="mb-4">
+      <h2 class="text-lg text-primary font-semibold my-6">{{ capitalizeFirstLetter(month.key) }}</h2>
+      <ul>
+        <li *ngFor="let transaction of month.value" class="mb-2 text-dark-grey">
+          <div class="flex flex-row justify-between items-center my-2">
+            <div class="flex flex-col justify-between">
+              <span>{{ transaction.description === 'deposit' ? 'Depósito' : 'Transferência' }}</span>
+              <span class="font-bold">
+                {{ transaction.description === 'transfer' ? '-' : '' }}
+                {{ transaction.value | currency: 'BRL' }}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              {{ transaction.date | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <hr class="my-4" />
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

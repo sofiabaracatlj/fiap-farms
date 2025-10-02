@@ -1,0 +1,77 @@
+/* Inventory Viewer Component Styles */
+
+.inventory-viewer {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Hover effects for table rows */
+.inventory-viewer .hover\:bg-gray-50:hover {
+    background-color: #f9fafb;
+}
+
+/* Smooth transitions for sorting icons */
+.fa-sort,
+.fa-sort-up,
+.fa-sort-down {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Progress bar animations */
+.inventory-viewer .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Custom scrollbar for mobile */
+@media (max-width: 1024px) {
+    .inventory-viewer {
+        overflow-x: auto;
+    }
+}
+
+/* Status badge animations */
+.inventory-viewer .inline-flex {
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Search input focus styles */
+.inventory-viewer input:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading spinner */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive grid adjustments */
+@media (min-width: 1024px) {
+    .inventory-viewer .lg\:grid-cols-7 {
+        grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1fr 1.5fr 1fr;
+    }
+}
+
+/* Custom styling for expired items */
+.text-red-600 {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+/* Enhanced card shadow on hover */
+.inventory-viewer .hover\:bg-gray-50:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+    transition: all 0.2s ease-in-out;
+}

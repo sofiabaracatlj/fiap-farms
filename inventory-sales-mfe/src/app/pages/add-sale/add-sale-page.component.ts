@@ -17,6 +17,7 @@ export class AddSalePageComponent implements OnInit {
     isLoading = false;
     products$: Observable<Product[]>;
     selectedProduct: Product | null = null;
+    showModal = false; // Nova propriedade para controlar o modal
 
     paymentMethods = [
         { value: PaymentMethod.CASH, label: 'Dinheiro' },
@@ -230,5 +231,14 @@ export class AddSalePageComponent implements OnInit {
         };
 
         return labels[fieldName] || fieldName;
+    }
+
+    // Métodos para controlar o modal
+    openAddSaleModal(): void {
+        this.showModal = true;
+    }
+
+    closeAddSaleModal(): void {
+        this.showModal = false;
     }
 }

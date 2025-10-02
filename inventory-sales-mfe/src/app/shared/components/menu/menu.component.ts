@@ -11,13 +11,9 @@ export class MenuComponent {
 
     menuItems = [
         { href: '/dashboard', label: 'Dashboard' },
-        { href: '/home/sales', label: 'Vendas' },
-        { href: '/home/production', label: 'Produção' },
-        { href: '/home/inventory', label: 'Estoque' },
         { href: '/home/add-product', label: 'Produtos' },
-        { href: '/home/add-stock', label: 'Add Estoque' },
-        { href: '/home/add-sale', label: 'Add Venda' },
-        { href: '/home/goals', label: 'Metas' },
+        { href: '/home/add-stock', label: 'Estoque' },
+        { href: '/home/add-sale', label: 'Vendas' },
     ];
 
     typeClasses: { [key: string]: string } = {

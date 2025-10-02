@@ -1,0 +1,235 @@
+<div class="sales-viewer-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center h-32">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-500"></div>
+        <span class="ml-3 text-gray-600">Carregando vendas...</span>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            <span>{{error}}</span>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && !error">
+        <!-- Controles de Filtro e Busca -->
+        <div class="mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Busca -->
+                <div class="md:col-span-2">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            [(ngModel)]="searchTerm"
+                            (input)="onSearch()"
+                            placeholder="Buscar por produto, cliente ou email..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- Ordenação -->
+                <div>
+                    <select
+                        [(ngModel)]="sortBy"
+                        (change)="onSortChange()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="date">Data</option>
+                        <option value="customer">Cliente</option>
+                        <option value="total">Valor Total</option>
+                        <option value="profit">Lucro</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por Status -->
+                <div>
+                    <select
+                        [(ngModel)]="filterBy"
+                        (change)="onFilterChange()"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">Todos os Status</option>
+                        <option value="completed">Concluída</option>
+                        <option value="pending">Pendente</option>
+                        <option value="cancelled">Cancelada</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Direção da Ordenação -->
+            <div class="mt-3 flex items-center">
+                <label class="flex items-center cursor-pointer">
+                    <input
+                        type="checkbox"
+                        [(ngModel)]="sortDirection"
+                        [value]="sortDirection === 'asc' ? 'desc' : 'asc'"
+                        (change)="sortDirection = sortDirection === 'asc' ? 'desc' : 'asc'; onSortChange()"
+                        class="mr-2">
+                    <span class="text-sm text-gray-600">
+                        Ordem {{ sortDirection === 'asc' ? 'Crescente' : 'Decrescente' }}
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Lista de Vendas -->
+        <div *ngIf="filteredSales.length === 0" class="text-center py-12">
+            <i class="fas fa-receipt text-4xl text-gray-400 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhuma venda encontrada</h3>
+            <p class="text-gray-500">Não há vendas que correspondam aos filtros selecionados.</p>
+        </div>
+
+        <!-- Tabela de Vendas -->
+        <div *ngIf="filteredSales.length > 0" class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Data
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Produto
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Cliente
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Quantidade
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Valor Total
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Lucro
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Margem
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Pagamento
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr *ngFor="let item of filteredSales" class="hover:bg-gray-50">
+                            <!-- Data -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ formatDate(item.sale.saleDate) }}
+                            </td>
+                            
+                            <!-- Produto -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">{{ item.product.name }}</div>
+                                    <div class="text-sm text-gray-500">{{ item.product.category }}</div>
+                                </div>
+                            </td>
+                            
+                            <!-- Cliente -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ item.sale.customerName || 'Não informado' }}
+                                    </div>
+                                    <div class="text-sm text-gray-500" *ngIf="item.sale.customerEmail">
+                                        {{ item.sale.customerEmail }}
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            <!-- Quantidade -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ item.sale.quantity }}
+                            </td>
+                            
+                            <!-- Valor Total -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ formatCurrency(item.sale.totalAmount) }}
+                            </td>
+                            
+                            <!-- Lucro -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" 
+                                [class]="getProfitColor(item.profitMargin)">
+                                {{ formatCurrency(item.profitAmount) }}
+                            </td>
+                            
+                            <!-- Margem -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                                [class]="getProfitColor(item.profitMargin)">
+                                {{ item.profitMargin | number:'1.1-1' }}%
+                            </td>
+                            
+                            <!-- Pagamento -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ item.sale.paymentMethod }}
+                            </td>
+                            
+                            <!-- Status -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                      [class]="getStatusColor(item.sale.status)">
+                                    {{ getStatusLabel(item.sale.status) }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Resumo -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-receipt text-blue-600 text-lg mr-3"></i>
+                    <div>
+                        <div class="text-sm font-medium text-blue-800">Total de Vendas</div>
+                        <div class="text-2xl font-bold text-blue-900">{{ filteredSales.length }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-dollar-sign text-green-600 text-lg mr-3"></i>
+                    <div>
+                        <div class="text-sm font-medium text-green-800">Receita Total</div>
+                        <div class="text-2xl font-bold text-green-900">
+                            {{ formatCurrency(getTotalRevenue()) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-chart-line text-purple-600 text-lg mr-3"></i>
+                    <div>
+                        <div class="text-sm font-medium text-purple-800">Lucro Total</div>
+                        <div class="text-2xl font-bold text-purple-900">
+                            {{ formatCurrency(getTotalProfit()) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-percentage text-orange-600 text-lg mr-3"></i>
+                    <div>
+                        <div class="text-sm font-medium text-orange-800">Margem Média</div>
+                        <div class="text-2xl font-bold text-orange-900">
+                            {{ getAverageMargin() | number:'1.1-1' }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

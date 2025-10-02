@@ -30,6 +30,8 @@ import { SimpleProgressBarComponent } from 'src/app/shared/components/simple-pro
 import { AddProductPageComponent } from '../add-product/add-product-page.component';
 import { AddStockPageComponent } from '../add-stock/add-stock-page.component';
 import { AddSalePageComponent } from '../add-sale/add-sale-page.component';
+import { InventoryViewerComponent } from '../../shared/components/inventory-viewer/inventory-viewer.component';
+import { SalesViewerComponent } from '../../shared/components/sales-viewer/sales-viewer.component';
 import { ProductRepository } from 'src/app/core/domain/repositories/product.repository';
 import { InventoryRepository } from 'src/app/core/domain/repositories/inventory.repository';
 import { SaleRepository } from 'src/app/core/domain/repositories/sale.repository';
@@ -65,7 +67,9 @@ import { CreateSaleUseCase } from 'src/app/core/use-cases/create-sale.use-case';
         SimpleProgressBarComponent,
         AddProductPageComponent,
         AddStockPageComponent,
-        AddSalePageComponent
+        AddSalePageComponent,
+        InventoryViewerComponent,
+        SalesViewerComponent
 
 
     ], // Declare components

@@ -15,6 +15,7 @@ export class AddStockPageComponent implements OnInit {
     stockForm: FormGroup;
     isLoading = false;
     products$: Observable<Product[]>;
+    showModal = false;
 
     movementReasons = [
         'Produção Própria',
@@ -60,6 +61,15 @@ export class AddStockPageComponent implements OnInit {
         console.log('AddStockPage inicializada');
     }
 
+    openAddStockModal(): void {
+        this.showModal = true;
+    }
+
+    closeAddStockModal(): void {
+        this.showModal = false;
+        this.onReset(); // Limpar formulário quando fechar modal
+    }
+
     get totalValue(): number {
         const quantity = this.stockForm.get('quantity')?.value || 0;
         const unitPrice = this.stockForm.get('unitPrice')?.value || 0;
@@ -96,10 +106,8 @@ export class AddStockPageComponent implements OnInit {
                     // Mostrar mensagem de sucesso
                     alert(`Estoque adicionado com sucesso!\n${result.movement.quantity} unidades de ${result.inventory.productId}`);
 
-                    // Redirecionar para página inicial
-                    this.ngZone.runOutsideAngular(() => {
-                        window.location.href = '/home';
-                    });
+                    // Fechar modal e limpar formulário
+                    this.closeAddStockModal();
                 },
                 error: (error) => {
                     console.error('Erro ao adicionar estoque:', error);

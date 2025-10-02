@@ -20,6 +20,7 @@ console.log('AppModule - Environment features:', environment.features);
 
 // Components
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { InventoryPageComponent } from './pages/inventory/inventory-page.component';
 
 // Repositories and Services
 import { ProductRepository } from './core/domain/repositories/product.repository';
@@ -34,6 +35,7 @@ import { FirebaseAuthInterceptor } from './core/infrastructure/firebase-auth.int
   declarations: [
     AppComponent,
     DashboardComponent,
+    InventoryPageComponent,
   ],
   imports: [
     BrowserModule,

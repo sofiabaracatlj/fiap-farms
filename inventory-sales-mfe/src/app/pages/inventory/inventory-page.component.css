@@ -1,0 +1,30 @@
+/* Inventory Page Styles */
+
+.inventory-page {
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+.inventory-page .max-w-7xl {
+    max-width: 80rem;
+}
+
+/* Header styling */
+.inventory-page h1 {
+    color: #111827;
+    font-weight: 700;
+}
+
+.inventory-page p {
+    color: #6b7280;
+}
+
+/* Button hover effects */
+.inventory-page button {
+    transition: all 0.2s ease-in-out;
+}
+
+.inventory-page button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}

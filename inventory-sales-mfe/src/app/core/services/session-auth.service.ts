@@ -134,7 +134,7 @@ export class SessionAuthService {
     private async authenticateWithRefreshToken(userData: any): Promise<void> {
         try {
             console.log('SessionAuthService - Autenticando com refresh token');
-            
+
             // Verificar se a configuração do Firebase é válida antes de tentar autenticar
             const isConfigValid = this.validateFirebaseConfig();
             if (!isConfigValid) {
@@ -159,7 +159,7 @@ export class SessionAuthService {
                 console.log('SessionAuthService - Autenticação simulada concluída');
             } catch (authError: any) {
                 console.error('SessionAuthService - Erro na autenticação Firebase:', authError);
-                
+
                 // Se o erro for de API key inválida, apenas salvar os dados sem autenticar
                 if (authError.code === 'auth/api-key-not-valid' || authError.message.includes('api-key-not-valid')) {
                     console.warn('SessionAuthService - API key inválida, salvando dados sem autenticação Firebase');
@@ -179,29 +179,29 @@ export class SessionAuthService {
         try {
             // Verificar se a configuração do Firebase tem valores válidos usando dados do environment
             const firebaseConfig = (this.afAuth as any).auth.app.options;
-            
+
             if (!firebaseConfig) return false;
-            
+
             // Verificar se não são valores de exemplo/placeholder
             const apiKey = firebaseConfig.apiKey;
             const projectId = firebaseConfig.projectId;
-            
+
             if (!apiKey || !projectId) return false;
-            
+
             // Verificar se não são valores de exemplo
-            if (apiKey.includes('placeholder') || 
-                apiKey.includes('example') || 
+            if (apiKey.includes('placeholder') ||
+                apiKey.includes('example') ||
                 apiKey.includes('fake') ||
                 projectId.includes('placeholder') ||
                 projectId.includes('example')) {
                 return false;
             }
-            
+
             // Verificar se a API key tem um formato válido (começa com AIza)
             if (!apiKey.startsWith('AIza')) {
                 return false;
             }
-            
+
             return true;
         } catch (error) {
             console.error('SessionAuthService - Erro ao validar configuração Firebase:', error);
@@ -335,25 +335,25 @@ export class SessionAuthService {
     async signInAnonymously(): Promise<void> {
         try {
             console.log('SessionAuthService - Fazendo login anônimo');
-            
+
             // Verificar se a configuração é válida antes de tentar
             const isConfigValid = this.validateFirebaseConfig();
             if (!isConfigValid) {
                 console.warn('SessionAuthService - Configuração Firebase inválida, pulando login anônimo');
                 return;
             }
-            
+
             await this.afAuth.signInAnonymously();
             console.log('SessionAuthService - Login anônimo realizado com sucesso');
         } catch (error: any) {
             console.error('SessionAuthService - Erro ao fazer login anônimo:', error);
-            
+
             // Se for erro de API key, não propagar o erro
             if (error.code === 'auth/api-key-not-valid' || error.message.includes('api-key-not-valid')) {
                 console.warn('SessionAuthService - API key inválida detectada, continuando sem autenticação Firebase');
                 return;
             }
-            
+
             throw error;
         }
     }

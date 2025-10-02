@@ -33,17 +33,16 @@ export class FirebaseProductService implements ProductRepository {
         private afAuth: AngularFireAuth,
         private sessionAuthService: SessionAuthService
     ) {
-        console.log('FirebaseProductService - Constructor chamado');
-        console.log('FirebaseProductService - AngularFirestore instance:', this.firestore);
+        console.log('🔥 FirebaseProductService - Inicializando conexão...');
 
         try {
             this.productsCollection = this.firestore.collection<FirestoreProduct>('products');
-            console.log('FirebaseProductService - Products collection criada:', this.productsCollection);
+            console.log('✅ Collection "products" criada com sucesso');
 
             // Garantir que a autenticação esteja configurada
             this.ensureAuthentication();
         } catch (error) {
-            console.error('FirebaseProductService - Erro ao criar collection:', error);
+            console.error('❌ Erro ao criar collection "products":', error);
         }
     }
 
@@ -125,25 +124,26 @@ export class FirebaseProductService implements ProductRepository {
     }
 
     findAll(): Observable<Product[]> {
-        console.log('FirebaseProductService - Carregando todos os produtos do Firebase');
-        console.log('FirebaseProductService - Firestore instance:', this.firestore);
-        console.log('FirebaseProductService - Products collection:', this.productsCollection);
+        console.log('🔍 Buscando todos os produtos no Firebase...');
 
         return from(this.sessionAuthService.isAuthenticated()).pipe(
             switchMap(async (isAuth) => {
                 if (!isAuth) {
-                    console.log('FirebaseProductService - Usuário não autenticado, restaurando sessão');
+                    console.log('🔐 Usuário não autenticado, restaurando sessão...');
                     await this.sessionAuthService.initializeAuthFromSession();
                 }
                 return this.productsCollection.valueChanges({ idField: 'id' });
             }),
             switchMap(observable => observable),
             map(products => {
-                console.log('FirebaseProductService - Produtos recebidos do Firebase:', products);
+                console.log(`📦 ${products.length} produtos encontrados no Firebase`);
+                if (products.length > 0) {
+                    console.log('📋 Primeiro produto:', products[0]);
+                }
                 return products.map(this.convertFirestoreToProduct);
             }),
             catchError(error => {
-                console.error('FirebaseProductService - Erro ao carregar produtos:', error);
+                console.error('❌ Erro ao carregar produtos do Firebase:', error);
                 throw error;
             })
         );
@@ -274,6 +274,47 @@ export class FirebaseProductService implements ProductRepository {
                     .slice(0, limit);
             })
         );
+    }
+
+    findByIds(productIds: string[]): Observable<Product[]> {
+        console.log('🔍 Buscando produtos por IDs específicos...', productIds.length, 'IDs');
+
+        if (productIds.length === 0) {
+            console.log('📦 Nenhum ID fornecido, retornando array vazio');
+            return from([[]]);
+        }
+
+        // Firebase tem limite de 10 IDs por consulta "in", então vamos dividir em chunks
+        const chunks = this.chunkArray(productIds, 10);
+
+        return from(this.sessionAuthService.isAuthenticated()).pipe(
+            switchMap(async (isAuth) => {
+                if (!isAuth) {
+                    console.log('🔐 Usuário não autenticado, restaurando sessão...');
+                    await this.sessionAuthService.initializeAuthFromSession();
+                }
+
+                const promises = chunks.map(chunk =>
+                    this.firestore.collection<FirestoreProduct>('products', ref =>
+                        ref.where(firebase.firestore.FieldPath.documentId(), 'in', chunk)
+                    ).valueChanges({ idField: 'id' }).toPromise()
+                );
+
+                const results = await Promise.all(promises);
+                const allProducts = results.flat();
+
+                console.log(`📦 ${allProducts.length} produtos encontrados para ${productIds.length} IDs solicitados`);
+                return allProducts.map(this.convertFirestoreToProduct);
+            })
+        );
+    }
+
+    private chunkArray<T>(array: T[], size: number): T[][] {
+        const chunks: T[][] = [];
+        for (let i = 0; i < array.length; i += size) {
+            chunks.push(array.slice(i, i + size));
+        }
+        return chunks;
     }
 
     // Método auxiliar para converter dados do Firestore para Product

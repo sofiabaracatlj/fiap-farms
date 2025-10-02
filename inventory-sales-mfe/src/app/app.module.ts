@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +19,7 @@ console.log('AppModule - Firebase config:', environment.firebase);
 console.log('AppModule - Environment features:', environment.features);
 
 // Components
-// import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 // Repositories and Services
 import { ProductRepository } from './core/domain/repositories/product.repository';
@@ -32,11 +33,12 @@ import { FirebaseAuthInterceptor } from './core/infrastructure/firebase-auth.int
 @NgModule({
   declarations: [
     AppComponent,
-    // DashboardComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
     CommonModule,
+    FormsModule,
     HttpClientModule,
     AppRoutingModule,
     FontAwesomeModule,

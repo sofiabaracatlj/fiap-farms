@@ -5,6 +5,7 @@ export abstract class ProductRepository {
     abstract findAll(): Observable<Product[]>;
     abstract findById(id: string): Observable<Product | null>;
     abstract findByCategory(category: string): Observable<Product[]>;
+    abstract findByIds(productIds: string[]): Observable<Product[]>;
     abstract create(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Observable<Product>;
     abstract update(id: string, product: Partial<Product>): Observable<Product>;
     abstract delete(id: string): Observable<boolean>;

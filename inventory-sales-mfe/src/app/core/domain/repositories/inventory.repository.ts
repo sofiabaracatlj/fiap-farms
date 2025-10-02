@@ -5,7 +5,9 @@ export abstract class InventoryRepository {
     abstract findAll(): Observable<Inventory[]>;
     abstract findById(id: string): Observable<Inventory | null>;
     abstract findByProductId(productId: string): Observable<Inventory | null>;
+    abstract findByProductIds(productIds: string[]): Observable<Inventory[]>;
     abstract findLowStockItems(): Observable<Inventory[]>;
+    abstract findLowStockByProductIds(productIds: string[]): Observable<Inventory[]>;
     abstract create(inventory: Omit<Inventory, 'id' | 'createdAt' | 'updatedAt'>): Observable<Inventory>;
     abstract update(id: string, inventory: Partial<Inventory>): Observable<Inventory>;
     abstract delete(id: string): Observable<boolean>;

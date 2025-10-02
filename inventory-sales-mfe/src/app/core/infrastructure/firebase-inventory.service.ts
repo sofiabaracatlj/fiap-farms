@@ -44,28 +44,30 @@ export class FirebaseInventoryService implements InventoryRepository {
         private ngZone: NgZone,
         private firestore: AngularFirestore
     ) {
-        console.log('FirebaseInventoryService - Constructor chamado');
-        console.log('FirebaseInventoryService - AngularFirestore instance:', this.firestore);
+        console.log('🔥 FirebaseInventoryService - Inicializando conexão...');
 
         try {
             this.inventoriesCollection = this.firestore.collection<FirestoreInventory>('inventories');
             this.stockMovementsCollection = this.firestore.collection<FirestoreStockMovement>('stock_movements');
-            console.log('FirebaseInventoryService - Collections criadas');
+            console.log('✅ Collections "inventories" e "stock_movements" criadas com sucesso');
         } catch (error) {
-            console.error('FirebaseInventoryService - Erro ao criar collections:', error);
+            console.error('❌ Erro ao criar collections de inventário:', error);
         }
     }
 
     findAll(): Observable<Inventory[]> {
-        console.log('FirebaseInventoryService - Carregando todos os inventários do Firebase');
+        console.log('🔍 Buscando todos os inventários no Firebase...');
 
         return this.inventoriesCollection.valueChanges({ idField: 'id' }).pipe(
             map(inventories => {
-                console.log('FirebaseInventoryService - Inventários recebidos do Firebase:', inventories);
+                console.log(`📦 ${inventories.length} inventários encontrados no Firebase`);
+                if (inventories.length > 0) {
+                    console.log('📋 Primeiro inventário:', inventories[0]);
+                }
                 return inventories.map(this.convertFirestoreToInventory);
             }),
             catchError(error => {
-                console.error('FirebaseInventoryService - Erro ao carregar inventários:', error);
+                console.error('❌ Erro ao carregar inventários do Firebase:', error);
                 throw error;
             })
         );
@@ -98,11 +100,89 @@ export class FirebaseInventoryService implements InventoryRepository {
         );
     }
 
+    findByProductIds(productIds: string[]): Observable<Inventory[]> {
+        console.log('🔍 Buscando inventário por IDs de produtos específicos...', productIds.length, 'IDs');
+
+        if (productIds.length === 0) {
+            console.log('📦 Nenhum ID de produto fornecido, retornando array vazio');
+            return from([[]]);
+        }
+
+        // Firebase tem limite de 10 IDs por consulta "in"
+        const chunks = this.chunkArray(productIds, 10);
+
+        return from(Promise.all(
+            chunks.map(chunk =>
+                this.inventoriesCollection.ref
+                    .where('productId', 'in', chunk)
+                    .get()
+                    .then(snapshot => {
+                        const inventories: Inventory[] = [];
+                        snapshot.forEach(doc => {
+                            const data = doc.data() as FirestoreInventory;
+                            inventories.push(this.convertFirestoreToInventory({ id: doc.id, ...data }));
+                        });
+                        return inventories;
+                    })
+            )
+        )).pipe(
+            map(results => {
+                const allInventories = results.flat();
+                console.log(`📦 ${allInventories.length} itens de inventário encontrados para ${productIds.length} produtos`);
+                return allInventories;
+            }),
+            catchError(error => {
+                console.error('❌ Erro ao carregar inventário por IDs de produtos:', error);
+                throw error;
+            })
+        );
+    }
+
     findLowStockItems(): Observable<Inventory[]> {
         return this.inventoriesCollection.valueChanges({ idField: 'id' }).pipe(
             map(inventories => {
                 const converted = inventories.map(this.convertFirestoreToInventory);
                 return converted.filter(inv => inv.currentStock <= inv.minimumStock);
+            })
+        );
+    }
+
+    findLowStockByProductIds(productIds: string[]): Observable<Inventory[]> {
+        console.log('🔍 Buscando itens com estoque baixo para produtos específicos...', productIds.length, 'IDs');
+
+        if (productIds.length === 0) {
+            return from([[]]);
+        }
+
+        const chunks = this.chunkArray(productIds, 10);
+
+        return from(Promise.all(
+            chunks.map(chunk =>
+                this.inventoriesCollection.ref
+                    .where('productId', 'in', chunk)
+                    .get()
+                    .then(snapshot => {
+                        const lowStockItems: Inventory[] = [];
+                        snapshot.forEach(doc => {
+                            const data = doc.data() as FirestoreInventory;
+                            const inventory = this.convertFirestoreToInventory({ id: doc.id, ...data });
+                            // Filtrar apenas itens com estoque baixo
+                            if (inventory.currentStock < inventory.minimumStock) {
+                                lowStockItems.push(inventory);
+                            }
+                        });
+                        return lowStockItems;
+                    })
+            )
+        )).pipe(
+            map(results => {
+                const allLowStockItems = results.flat();
+                console.log(`⚠️ ${allLowStockItems.length} itens com estoque baixo encontrados`);
+                return allLowStockItems;
+            }),
+            catchError(error => {
+                console.error('❌ Erro ao carregar itens com estoque baixo:', error);
+                throw error;
             })
         );
     }
@@ -358,5 +438,13 @@ export class FirebaseInventoryService implements InventoryRepository {
             createdAt: data.createdAt?.toDate() || new Date(),
             updatedAt: data.updatedAt?.toDate() || new Date()
         };
+    }
+
+    private chunkArray<T>(array: T[], size: number): T[][] {
+        const chunks: T[][] = [];
+        for (let i = 0; i < array.length; i += size) {
+            chunks.push(array.slice(i, i + size));
+        }
+        return chunks;
     }
 }

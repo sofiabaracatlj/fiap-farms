@@ -33,27 +33,30 @@ export class FirebaseSaleService implements SaleRepository {
         private ngZone: NgZone,
         private firestore: AngularFirestore
     ) {
-        console.log('FirebaseSaleService - Constructor chamado');
-        console.log('FirebaseSaleService - AngularFirestore instance:', this.firestore);
+        console.log('🔥 FirebaseSaleService - Inicializando conexão...');
+        console.log('📦 Firestore conectado:', !!this.firestore);
 
         try {
             this.salesCollection = this.firestore.collection<FirestoreSale>('sales');
-            console.log('FirebaseSaleService - Sales collection criada');
+            console.log('✅ Collection "sales" criada com sucesso');
         } catch (error) {
-            console.error('FirebaseSaleService - Erro ao criar collection:', error);
+            console.error('❌ Erro ao criar collection "sales":', error);
         }
     }
 
     findAll(): Observable<Sale[]> {
-        console.log('FirebaseSaleService - Carregando todas as vendas do Firebase');
+        console.log('🔍 Buscando todas as vendas no Firebase...');
 
         return this.salesCollection.valueChanges({ idField: 'id' }).pipe(
             map(sales => {
-                console.log('FirebaseSaleService - Vendas recebidas do Firebase:', sales);
+                console.log(`📊 ${sales.length} vendas encontradas no Firebase`);
+                if (sales.length > 0) {
+                    console.log('📋 Primeira venda:', sales[0]);
+                }
                 return sales.map(this.convertFirestoreToSale);
             }),
             catchError(error => {
-                console.error('FirebaseSaleService - Erro ao carregar vendas:', error);
+                console.error('❌ Erro ao carregar vendas do Firebase:', error);
                 throw error;
             })
         );
@@ -77,12 +80,29 @@ export class FirebaseSaleService implements SaleRepository {
         const startTimestamp = firebase.firestore.Timestamp.fromDate(startDate);
         const endTimestamp = firebase.firestore.Timestamp.fromDate(endDate);
 
+        console.log('🔍 Executando consulta de vendas por data no Firestore...');
+
         return this.firestore.collection<FirestoreSale>('sales', ref =>
             ref.where('saleDate', '>=', startTimestamp)
                 .where('saleDate', '<=', endTimestamp)
                 .orderBy('saleDate', 'desc')
         ).valueChanges({ idField: 'id' }).pipe(
-            map(sales => sales.map(this.convertFirestoreToSale))
+            map(sales => {
+                console.log(`📊 ${sales.length} vendas encontradas no período`);
+                if (sales.length > 0) {
+                    console.log('📋 Vendas do período:', sales.map(s => ({
+                        id: s.id,
+                        date: s.saleDate?.toDate()?.toLocaleDateString(),
+                        amount: s.totalAmount
+                    })));
+                }
+                return sales.map(this.convertFirestoreToSale);
+            }),
+            catchError(error => {
+                console.error('❌ Erro na consulta Firebase:', error);
+                console.error('🔧 Verifique se o índice está criado no Firestore Console');
+                throw error;
+            })
         );
     }
 
@@ -266,6 +286,52 @@ export class FirebaseSaleService implements SaleRepository {
                     volume
                 }));
             })
+        );
+    }
+
+    findByMonthYear(month: number, year: number): Observable<Sale[]> {
+        // Criar as datas de início e fim do mês
+        const startDate = new Date(year, month, 1);
+        const endDate = new Date(year, month + 1, 0, 23, 59, 59, 999);
+
+        console.log(`📅 Buscando vendas de ${this.getMonthName(month)} ${year}`);
+        console.log(`📅 Período: ${startDate.toLocaleDateString()} até ${endDate.toLocaleDateString()}`);
+
+        return this.findByDateRange(startDate, endDate);
+    }
+
+    private getMonthName(month: number): string {
+        const monthNames = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+        return monthNames[month];
+    }
+
+    getMonthlyRevenue(month: number, year: number): Observable<number> {
+        return this.findByMonthYear(month, year).pipe(
+            map(sales => sales
+                .filter(sale => sale.status === SaleStatus.COMPLETED)
+                .reduce((total, sale) => total + sale.totalAmount, 0)
+            )
+        );
+    }
+
+    getMonthlyProfit(month: number, year: number): Observable<number> {
+        return this.findByMonthYear(month, year).pipe(
+            map(sales => sales
+                .filter(sale => sale.status === SaleStatus.COMPLETED)
+                .reduce((total, sale) => total + sale.profit, 0)
+            )
+        );
+    }
+
+    getMonthlySalesCount(month: number, year: number): Observable<number> {
+        return this.findByMonthYear(month, year).pipe(
+            map(sales => sales
+                .filter(sale => sale.status === SaleStatus.COMPLETED)
+                .length
+            )
         );
     }
 
